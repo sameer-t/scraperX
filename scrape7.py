@@ -42,7 +42,7 @@ def maploc (dop, place):
 	return place
 
 ctm = {}
-maplocs = load_workbook(filename='cities to map.xlsx',use_iterators=True)
+maplocs = load_workbook(filename='/home/sameer/cities to map.xlsx',use_iterators=True)
 for area in maplocs.get_sheet_names():
 	ctm[area] = []
 	ts = maplocs[area]
