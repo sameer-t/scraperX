@@ -13,20 +13,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 
-def dur_mon (totdur):
-	if 'year' in totdur:
-		ny = int(totdur[totdur.find('(')+1:totdur.find('year')-1])
-	else:
-		ny = 0
-	if 'month' in totdur and not 'year' in totdur:
-		nm = int(totdur[totdur.find('(')+1:totdur.find('month')-1])
-	elif 'month' in totdur and 'year' in totdur:
-		nm = int(totdur[totdur.find('month')-3:totdur.find('month')-1])
-	else:
-		nm = 0
-	tm = ny*12 + nm
-	return tm
-
 def trim (des):
 	desc = des.encode('utf8')
 	toremove = ['•', '-','\n1.','\n2.','\n3.','\n4.','\n5.','\n6.','\n7.','\n8.','\n9.','\n10.','\n11.','\n12.', '\n13.', '\n14.', '\n15', '\n\n']
@@ -35,21 +21,12 @@ def trim (des):
 			desc = desc.replace(symbol,'') 
 	return desc
 
-def maploc (dop, place):
-	for k in dop:
-		for v in dop[k]:
-			if place in v:
-				return k
-	return place
-
-ctm = {}
-maplocs = load_workbook(filename='/home/sameer/cities to map.xlsx',use_iterators=True)
-for area in maplocs.get_sheet_names():
-	ctm[area] = []
-	ts = maplocs[area]
-	for row in ts.iter_rows():
-		for cell in row:
-			ctm[area].append(cell.value)
+ubci = []
+uberlocsl = load_workbook(filename='/home/sameer/Uber_Cities2.xlsx',use_iterators=True)
+locsl = uberlocsl['Sheet1']
+for row in locsl.iter_rows():
+	for cell in row:
+		ubci.append(cell.value)
 
 # Load driver.
 driver = webdriver.Chrome('/home/sameer/bin/chromedriver')
@@ -74,32 +51,42 @@ driver.get('https://www.linkedin.com/company/1815218')
 
 # Get to list page.
 driver.find_element_by_link_text('See all').click()
-driver.find_element_by_id('us:84-G-ffs').click()
-
-time.sleep(3)
 
 # Start scraping.
 
-try:
-    users = []
-    while len(users) < users:
-        users += [element.get_attribute('href') for element in driver.find_elements_by_class_name('title')]
-        print len(users)
-        driver.get(driver.find_element_by_link_text('Next >').get_attribute('href'))
-except Exception:
-    #print users
-    links = open('links', 'w')
-    links.write(str(users))
-    print 'Acquired links to user profiles.'
+allusers = []
 
-links = open('./links', 'r')
-users = eval(links.read())
+for city in ubci:
+	loc = driver.find_element_by_id('facet-G')
+	loc.find_element_by_class_name('add-facet-button').click()
+	time.sleep(3)
+	add_box = loc.find_element_by_class_name('facet-typeahead')
+	add_box.send_keys(city)
+	time.sleep(3)
+	try:
+		users = []
+		while len(users) < users:
+			users += [element.get_attribute('href') for element in driver.find_elements_by_class_name('title')]
+			print len(users)
+			driver.get(driver.find_element_by_link_text('Next >').get_attribute('href'))
+	except Exception:
+		#print users
+		links = open('links', 'w')
+		links.write(str(users))
+		print 'Acquired links to user profiles for city ' + city
+	allusers += users
+	driver.get('https://www.linkedin.com/vsearch/p?f_CC=1815218&trk=rr_connectedness')
+
+alllinks = open('alllinks', 'w')
+alllinks.write(str(allusers))
+
+alllinks = open('./alllinks', 'r')
+users = eval(alllinks.read())
 print len(users)
 
 alluserdat = []
 userno = 1 
 i = 1
-
 try:
 	for link in users:
 		if str(type(link)) == "<type 'unicode'>":
