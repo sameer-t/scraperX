@@ -44,11 +44,6 @@ password_box.submit()
 # Go to Uber page.
 driver.get('https://www.linkedin.com/company/1815218')
 
-# Find number of users.
-#user_count = (driver.find_elements_by_class_name('density')[2].text)
-#user_count = int(user_count.replace(',', ''))
-#print user_count
-
 # Get to list page.
 driver.find_element_by_link_text('See all').click()
 
@@ -57,12 +52,15 @@ driver.find_element_by_link_text('See all').click()
 allusers = []
 
 for city in ubci:
+	time.sleep(5)
 	loc = driver.find_element_by_id('facet-G')
 	loc.find_element_by_class_name('add-facet-button').click()
 	time.sleep(3)
 	add_box = loc.find_element_by_class_name('facet-typeahead')
 	add_box.send_keys(city)
 	time.sleep(3)
+	driver.find_element_by_class_name('item-headline').click()
+	time.sleep(5)
 	try:
 		users = []
 		while len(users) < users:
@@ -73,7 +71,7 @@ for city in ubci:
 		#print users
 		links = open('links', 'w')
 		links.write(str(users))
-		print 'Acquired links to user profiles for city ' + city
+		print 'Acquired links to user profiles for ' + city
 	allusers += users
 	driver.get('https://www.linkedin.com/vsearch/p?f_CC=1815218&trk=rr_connectedness')
 
@@ -86,7 +84,6 @@ print len(users)
 
 alluserdat = []
 userno = 1 
-i = 1
 try:
 	for link in users:
 		if str(type(link)) == "<type 'unicode'>":
@@ -153,11 +150,14 @@ try:
 				data = data.decode('utf-8')
 				data = trim(data)
 				userdat.append(data)
-				alluserdat.append(userdat)
+				if driver.find_element_by_class_name('full-name').text != 'LinkedIn Member':
+					alluserdat.append(userdat)
+					userno += 1
+				else:
+					print 'Anonymous user. Not added to database'
 			except NoSuchElementException:
 				print 'element not found'
 			print 'Done saving.'
-			userno += 1
 		else:
 			print 'Not a link :('
 except:
