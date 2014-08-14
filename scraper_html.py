@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
+from openpyxl import Workbook
 import time
 
 # Load driver.
@@ -21,6 +22,9 @@ links = open('./links_nest', 'r')
 users = eval(links.read())
 print len(users)
 
+wb = Workbook()
+ws = wb.active
+
 errorlinks = []
 
 userno = 1
@@ -35,6 +39,8 @@ try:
             user = open(str(userno)+'.html','w')
             user.write(page_html)
             user.close()
+            ws.cell(row = userno, column = 1).value = name.decode('utf-8','ignore')
+            ws.cell(row = userno, column = 2).value = str(ulink)
             userno +=1
         else:
             print 'Not a link :('
@@ -45,5 +51,7 @@ except:
 fails = open('failed_links', 'w')
 fails.write(str(errorlinks))
 fails.close()
+
+wb.save('NEST_lookup.xlsx')
 
 driver.quit()
