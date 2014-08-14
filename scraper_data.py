@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from bs4 import BeautifulSoup as bs
+import os
 
-with open('/home/sameer/2.html', 'r') as profile:
-	soup = bs(profile)
+for htmlprofile in sorted(os.listdir('/home/sameer/OpenSilo')):
+	soup = bs(htmlprofile)
 	name = soup.find("span","full-name").string
 	title = soup.find("p","title").text
 	summary = soup.find("div","summary").text
