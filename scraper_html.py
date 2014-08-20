@@ -2,11 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
-from openpyxl import Workbook
 from openpyxl import load_workbook
 import time
 
-pnplinks = load_workbook('/home/sameer/pnp_links.xlsx')
+pnplinks = load_workbook('/home/sameer/linkedin-scraper/pnp_links.xlsx')
 ws = pnplinks.active
 
 users = []
@@ -16,7 +15,7 @@ for pl in range(1,31):
 print len(users)
 
 # Load driver.
-driver = webdriver.Chrome('/home/sameer/bin/chromedriver')
+driver = webdriver.Chrome('/usr/bin/chromedriver')
 
 # Go to LinkedIn.
 driver.get('http://www.linkedin.com/');
