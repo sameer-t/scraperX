@@ -6,7 +6,7 @@ from openpyxl import Workbook
 import time
 
 # Load driver.
-driver = webdriver.Chrome('/home/sameer/bin/chromedriver')
+driver = webdriver.Chrome('/usr/bin/chromedriver')
 
 # Go to LinkedIn.
 driver.get('http://www.linkedin.com/');
@@ -18,7 +18,7 @@ login_box.send_keys('pvora2@gmail.com')
 password_box.send_keys('Opensilo1')
 password_box.submit()
 
-links = open('./links_nest', 'r')
+links = open('links_uber.txt', 'r')
 users = eval(links.read())
 print len(users)
 
@@ -52,6 +52,6 @@ fails = open('failed_links', 'w')
 fails.write(str(errorlinks))
 fails.close()
 
-wb.save('NEST_lookup.xlsx')
+wb.save('Uber_lookup.xlsx')
 
 driver.quit()
