@@ -2,11 +2,20 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
-from openpyxl import Workbook
+from openpyxl import load_workbook
 import time
 
+nestlinks = load_workbook('/home/sameer/linkedin-scraper/NEST_lookup.xlsx')
+ws = nestlinks.active
+
+users = []
+for pl in range(1,209):
+	users.append(ws.cell(row = pl, column = 6).value)
+
+print len(users)
+
 # Load driver.
-driver = webdriver.Chrome('/home/sameer/bin/chromedriver')
+driver = webdriver.Chrome('/usr/bin/chromedriver')
 
 # Go to LinkedIn.
 driver.get('http://www.linkedin.com/');
@@ -17,13 +26,6 @@ password_box = driver.find_element_by_name('session_password')
 login_box.send_keys('pvora2@gmail.com')
 password_box.send_keys('Opensilo1')
 password_box.submit()
-
-links = open('./links_nest', 'r')
-users = eval(links.read())
-print len(users)
-
-wb = Workbook()
-ws = wb.active
 
 errorlinks = []
 
@@ -39,8 +41,6 @@ try:
             user = open(str(userno)+'.html','w')
             user.write(page_html)
             user.close()
-            ws.cell(row = userno, column = 1).value = name.decode('utf-8','ignore')
-            ws.cell(row = userno, column = 2).value = str(ulink)
             userno +=1
         else:
             print 'Not a link :('
@@ -51,7 +51,5 @@ except:
 fails = open('failed_links', 'w')
 fails.write(str(errorlinks))
 fails.close()
-
-wb.save('NEST_lookup.xlsx')
 
 driver.quit()
