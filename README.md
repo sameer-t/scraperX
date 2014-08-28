@@ -3,6 +3,7 @@ This repository contains the scripts required to scrape profile data from Linked
 System Configuration: Ubuntu 14.04
 
 External python modules required:
+
 * Selenium + chrome web-driver
 * openpyxl
 * Beautiful Soup 4
