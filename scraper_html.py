@@ -18,18 +18,22 @@ login_box.send_keys('pvora2@gmail.com')
 password_box.send_keys('Opensilo1')
 password_box.submit()
 
-links = open('links_uber.txt', 'r')
+# Load the links created using the scraper_link script
+links = open('links_uber', 'r')
 users = eval(links.read())
 print len(users)
 
+# Create a workbook with name and profile url for later use
 wb = Workbook()
 ws = wb.active
 
 errorlinks = []
 
+# Start saving all the profiles in html format in the local system. 
+# If number of users is more than 500, consider using multiple premium accounts for scraping
 userno = 1
-try:
-    for ulink in users:
+for ulink in users:
+    try:
         if str(type(ulink)) == "<type 'unicode'>":
             driver.get(str(ulink))
             time.sleep(5)
@@ -43,15 +47,18 @@ try:
             ws.cell(row = userno, column = 2).value = str(ulink)
             userno +=1
         else:
-            print 'Not a link :('
-except:
-    errorlinks.append(ulink)
-    print 'Some exception'
-    
-fails = open('failed_links', 'w')
-fails.write(str(errorlinks))
-fails.close()
+            print 'Not a link (ノ ゜Д゜)ノ ︵ ┻━┻'
+    except:
+        errorlinks.append(ulink)
+        print 'Some exception (-_-メ)'
 
-wb.save('Uber_lookup.xlsx')
+if len(errorlinks) != 0:
+    fails = open('uber_failed_links', 'w')
+    fails.write(str(errorlinks))
+    fails.close()
+
+wb.save('uber_lookup.xlsx')
 
 driver.quit()
+
+print 'HTML scraping completed ( ͡° ͜ʖ ͡°)'

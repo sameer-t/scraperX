@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup as bs
 import os
 from openpyxl import Workbook
 
+# A trim function to remove any special symbols and multiple linebreaks
 def trim (des):
     desc = des.encode('utf-8',"ignore")
     toremove = ['•','\n–\n','\n–','\n1.','\n2.','\n3.','\n4.','\n5.','\n6.','\n7.','\n8.','\n9.','\n10.','\n11.','\n12.', '\n13.', '\n14.', '\n15', '\n\n', '\n\n\n']
@@ -16,9 +17,10 @@ def trim (des):
 wb = Workbook()
 ws = wb.active
 
-len_users = len(os.listdir('/home/sameer/linkedin-scraper/Uber_profiles'))
+# Move all the html files saved from scraper_html script into a folder and then run the following code
+len_users = len(os.listdir('/home/sameer/linkedin-scraper/uber_profiles'))
 for userno in range(1,len_users+1):
-    profile = open('/home/sameer/linkedin-scraper/Uber_profiles/'+ str(userno) + '.html', 'r')
+    profile = open('/home/sameer/linkedin-scraper/uber_profiles/'+ str(userno) + '.html', 'r')
     soup = bs(profile)
     try:
         name = trim(soup.find("span","full-name").string)
@@ -90,4 +92,6 @@ for userno in range(1,len_users+1):
     ws.cell(row = userno, column = 10).value = data.decode('utf-8','ignore')
     print str(userno) + ' ' + name + ' done'
 
-wb.save('Uber_raw.xlsx')
+# Save the spreadsheet. It is to be used for further formatting in Excel
+wb.save('uber_raw.xlsx')
+print 'Data scraping completed ( ͡° ͜ʖ ͡°)'
