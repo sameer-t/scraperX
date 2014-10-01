@@ -18,8 +18,8 @@ driver.get('http://www.linkedin.com/');
 # Login
 login_box = driver.find_element_by_name('session_key')
 password_box = driver.find_element_by_name('session_password')
-login_box.send_keys('saisameer.t@gmail.com')
-password_box.send_keys('santhishyam')
+login_box.send_keys('<INSERT LINKEDIN USERNAME HERE>')
+password_box.send_keys('<INSERT LINKEDIN PASSWORD HERE>')
 password_box.submit()
 
 
