@@ -14,8 +14,8 @@ driver.get('http://www.linkedin.com/');
 # Login
 login_box = driver.find_element_by_name('session_key')
 password_box = driver.find_element_by_name('session_password')
-login_box.send_keys('pvora2@gmail.com')
-password_box.send_keys('Opensilo1')
+login_box.send_keys('<INSERT USERNAME HERE>')
+password_box.send_keys('<INSERT PASSWORD HERE>')
 password_box.submit()
 
 # Load the links created using the scraper_link script
