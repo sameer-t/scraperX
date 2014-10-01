@@ -26,8 +26,8 @@ driver.get('http://www.linkedin.com/');
 
 login_box = driver.find_element_by_name('session_key')
 password_box = driver.find_element_by_name('session_password')
-login_box.send_keys('pvora2@gmail.com')
-password_box.send_keys('Opensilo1')
+login_box.send_keys('<INSERT LINKEDIN USERNAME HERE>')
+password_box.send_keys('<INSERT LINKEDIN PASSWORD HERE>')
 password_box.submit()
 
 driver.get('https://www.linkedin.com/company/1815218')
